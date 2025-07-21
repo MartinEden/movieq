@@ -1,0 +1,9 @@
+<head>
+    <title>MovieQ</title>
+</head>
+<body>
+    <h1>MovieQ</h1>
+    <form action="/lookup/" method="get">
+        <input type="text" name="query" placeholder="Search for a movie" />
+    </form>
+</body>
