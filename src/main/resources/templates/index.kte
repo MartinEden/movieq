@@ -1,5 +1,7 @@
 @template.layout(content = @`
     <form action="/lookup/" method="get">
-        <input type="text" name="query" placeholder="Search for a movie" />
+        <input type="text" name="query" placeholder="Movie title" />
+        <textarea name="reason" placeholder="Why this movie in particular?"></textarea>
+        <button type="submit">Add</button>
     </form>
 `)

@@ -34,7 +34,17 @@ body {
     margin-left: 10px;
 }
 
-form input {
+form input, form textarea, form button {
+    display: block;
     font-size: inherit;
+    font-family: inherit;
+}
+form button {
+    width: 33%;
+    margin-right: 0;
+    margin-left: auto;
+}
+form input, form textarea {
     width: 100%;
+    margin-bottom: 10px;
 }
