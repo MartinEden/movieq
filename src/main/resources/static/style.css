@@ -1,6 +1,7 @@
 body {
     background: rgb(0, 0, 40);
     color: rgb(200, 200, 200);
+    font-size: 16pt;
 }
 
 .content {
@@ -31,4 +32,9 @@ body {
     vertical-align: top;
     width: 300px;
     margin-left: 10px;
+}
+
+form input {
+    font-size: inherit;
+    width: 100%;
 }

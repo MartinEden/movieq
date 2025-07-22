@@ -1,9 +1,5 @@
-<head>
-    <title>MovieQ</title>
-</head>
-<body>
-    <h1>MovieQ</h1>
+@template.layout(content = @`
     <form action="/lookup/" method="get">
         <input type="text" name="query" placeholder="Search for a movie" />
     </form>
-</body>
+`)
