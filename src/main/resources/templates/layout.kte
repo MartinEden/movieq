@@ -1,8 +1,15 @@
 @param content: gg.jte.Content
-
+<!DOCTYPE html>
 <head>
     <title>MovieQ</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script type="text/javascript">
+        var saveMovieCallback = function(movieId) {
+            var form = document.saveMovie;
+            form.movieId.value = movieId;
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <div class="content">

@@ -1,11 +1,17 @@
 @param query: String
+@param reason: String
 @param titles: List<eden.movieq.models.TitleInfo>
 
 @template.layout(content = @`
     Results for "${query}":
 
+    <form name="saveMovie" action="/save/" method="post">
+        <input type="hidden" name="reason" value="${reason}" />
+        <input type="hidden" name="movieId" />
+    </form>
+
     @for(title in titles)
-        <div class="card">
+        <div class="card" onclick="saveMovieCallback('${title.id}');">
             <div class="thumbnail">
                 <img src="${title.primaryImage.url}" />
             </div>

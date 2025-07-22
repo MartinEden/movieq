@@ -16,6 +16,7 @@ body {
     margin: 20px 0;
     background: white;
     color: black;
+    cursor: pointer;
 }
 
 .card .thumbnail {

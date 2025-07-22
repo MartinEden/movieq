@@ -29,7 +29,12 @@ class MovieQApp(val imdbService: ImdbService) {
 
     fun lookupHandler(ctx: Context) {
         val query = ctx.queryParam("query") ?: throw Exception("No query was provided")
+        val reason = ctx.queryParam("reason") ?: ""
         val titles = imdbService.search(query)
-        ctx.render("lookup.kte", mapOf("query" to query, "titles" to titles))
+        ctx.render("lookup.kte", mapOf(
+            "query" to query,
+            "reason" to reason,
+            "titles" to titles,
+        ))
     }
 }
