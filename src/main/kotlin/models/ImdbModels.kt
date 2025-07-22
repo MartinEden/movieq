@@ -10,12 +10,43 @@ data class TitleInfo(
     val type: String,
     val primaryTitle: String,
     val originalTitle: String,
-    val primaryImage: ImageInfo = ImageInfo("/static/no-image.png", 300, 200),
+    val primaryImage: ImageInfo = ImageInfo.default,
     val startYear: Int? = null,
     val endYear: Int? = null,
     val rating: RatingInfo? = null,
 )
 @Serializable
-data class ImageInfo(val url: String, val width: Int, val height: Int)
+data class ImageInfo(val url: String, val width: Int, val height: Int) {
+    companion object {
+        val default = ImageInfo("/static/no-image.png", 300, 200)
+    }
+}
 @Serializable
 data class RatingInfo(val aggregateRating: Double, val voteCount: Long)
+
+@Serializable
+data class FullTitleInfo(
+    val id: String,
+    val type: String,
+    val isAdult: Boolean? = false,
+    val primaryTitle: String,
+    val originalTitle: String? = null,
+    val primaryImage: ImageInfo = ImageInfo.default,
+    val startYear: Int? = null,
+    val endYear: Int? = null,
+    val runtimeSeconds: Int? = null,
+    val genres: List<String> = emptyList(),
+    val rating: RatingInfo? = null,
+    val metacritic: MetacriticInfo? = null,
+    val plot: String? = null,
+    val originCountries: List<Country> = emptyList(),
+    val spokenLanguages: List<Country> = emptyList(),
+)
+@Serializable
+data class MetacriticInfo(
+    val url: String? = null,
+    val score: Int? = null,
+    val reviewCount: Int? = null
+)
+@Serializable
+data class Country(val code: String? = null, val name: String? = null)

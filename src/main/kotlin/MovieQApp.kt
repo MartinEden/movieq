@@ -10,20 +10,12 @@ import io.javalin.http.staticfiles.Location
 import io.javalin.rendering.template.JavalinJte
 
 class MovieQApp(val imdbService: ImdbService) {
-
     fun run() {
-        val app = Javalin.create {
-            val templateResolver = ResourceCodeResolver("templates", MovieQApp::class.java.classLoader)
-            it.fileRenderer(JavalinJte(TemplateEngine.create(templateResolver, ContentType.Html)))
-
-            it.staticFiles.add { staticFiles ->
-                staticFiles.hostedPath = "/static"
-                staticFiles.directory = "static"
-                staticFiles.location = Location.CLASSPATH
-            }
-        }
+        val app = makeJavalin()
+        // TODO: render the database
         app.get("") { it.render("index.kte") }
         app.get("lookup", ::lookupHandler)
+        app.post("save", ::saveHandler)
         app.start(8080)
     }
 
@@ -36,5 +28,24 @@ class MovieQApp(val imdbService: ImdbService) {
             "reason" to reason,
             "titles" to titles,
         ))
+    }
+
+    fun saveHandler(ctx: Context) {
+        val id = ctx.formParam("movieId") ?: throw Exception("No movieId was provided")
+        val reason = ctx.formParam("reason") ?: throw Exception("No reason was provided")
+        val title = imdbService.get(id) ?: throw Exception("Couldn't find title $id in IMDB service")
+        ctx.result(title.primaryTitle + ": " + (title.rating?.aggregateRating ?: "Unknown rating"))
+        // TODO: save this to the database
+    }
+
+    private fun makeJavalin(): Javalin = Javalin.create {
+        val templateResolver = ResourceCodeResolver("templates", MovieQApp::class.java.classLoader)
+        it.fileRenderer(JavalinJte(TemplateEngine.create(templateResolver, ContentType.Html)))
+
+        it.staticFiles.add { staticFiles ->
+            staticFiles.hostedPath = "/static"
+            staticFiles.directory = "static"
+            staticFiles.location = Location.CLASSPATH
+        }
     }
 }
