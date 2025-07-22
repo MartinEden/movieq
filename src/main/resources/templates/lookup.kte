@@ -11,15 +11,17 @@
     </form>
 
     @for(title in titles)
-        <div class="card" onclick="saveMovieCallback('${title.id}');">
+        <div class="card card-clickable" onclick="saveMovieCallback('${title.id}');">
             <div class="thumbnail">
                 <img src="${title.primaryImage.url}" />
             </div>
-            <div class="title">
-                ${title.primaryTitle}
-                @if(title.startYear != null)
-                    (<span class="year">${title.startYear}</span>)
-                @endif
+            <div class="card-main">
+                <div class="title">
+                    ${title.primaryTitle}
+                    @if(title.startYear != null)
+                        <span class="year">(${title.startYear})</span>
+                    @endif
+                </div>
             </div>
         </div>
     @endfor

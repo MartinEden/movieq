@@ -1,7 +1,52 @@
+@param movies: Iterable<eden.movieq.models.Movie>
+
 @template.layout(content = @`
     <form action="/lookup/" method="get">
         <input type="text" name="query" placeholder="Movie title" />
         <textarea name="reason" placeholder="Why this movie in particular?"></textarea>
         <button type="submit">Add</button>
     </form>
+
+    <!-- TODO: Add sorting by date added or by IMDB rating or by Rotten Tomatoes rating -->
+    <!-- TODO: Add filtering by tags -->
+    <!-- TODO: Mark movies as seen -->
+    <!-- TODO: Edit reason -->
+    <!-- TODO: Edit tags -->
+    <div>
+        @for(movie in movies)
+            <div class="card">
+                <div class="thumbnail">
+                    <img src="${movie.thumbnail}" />
+                </div>
+                <div class="card-main">
+                    <div class="title">
+                        ${movie.title}
+                        @if(movie.year != null)
+                            <span class="year">(${movie.year})</span>
+                        @endif
+                    </div>
+                    <div class="reason">
+                        "${movie.reason}"
+                    </div>
+                    <div class="synopsis">
+                        ${movie.synopsis}
+                    </div>
+                    <div class="tags">
+                        @for(tag in movie.tags)
+                            <span class="tag">${tag}</span>
+                        @endfor
+                    </div>
+                </div>
+                <div class="rating">
+                    <img src="/static/imdb.png" alt="IMDB rating" />
+                    ${movie.rating}%
+                    <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
+                    ${movie.tomatoMeter}%
+                </div>
+                <div class="date">
+                    ${movie.dateAdded.toString()}
+                </div>
+            </div>
+        @endfor
+    </div>
 `)
