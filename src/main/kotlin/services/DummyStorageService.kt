@@ -6,7 +6,13 @@ import java.time.LocalDate
 
 // TODO: Real database storage
 class DummyStorageService : StorageService {
-    override val movies = listOf(
+    override fun save(movie: Movie) {
+        movies.add(movie)
+    }
+
+    override val all get() = movies
+
+    private val movies: MutableList<Movie> = mutableListOf(
         Movie(
             imdbId = "dummy1",
             title = "A film about grass",

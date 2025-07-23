@@ -1,4 +1,5 @@
 @param movies: Iterable<eden.movieq.models.Movie>
+@param movieJson: String
 
 @template.layout(content = @`
     <form action="/lookup/" method="get">
@@ -33,10 +34,14 @@
                 </div>
             </div>
             <div class="rating">
-                <img src="/static/imdb.png" alt="IMDB rating" />
-                {{ movie.rating }}%
-                <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
-                {{ movie.tomatoMeter }}%
+                <span v-if="movie.rating">
+                    <img src="/static/imdb.png" alt="IMDB rating" />
+                    {{ movie.rating }}%
+                </span>
+                <span v-if="movie.tomatoMeter">
+                    <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
+                    {{ movie.tomatoMeter }}%
+                </span>
             </div>
             <div class="date">
                 {{ movie.dateAdded }}
@@ -45,21 +50,6 @@
     </div>
     <script type="module" src="/static/js/index.js"></script>
     <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => startVue([
-            @for(movie in movies)
-                {
-                    imdbId: "${movie.imdbId}",
-                    title: "${movie.title}",
-                    thumbnail: "${movie.thumbnail}",
-                    year: ${movie.year},
-                    reason: "${movie.reason}",
-                    synopsis: "${movie.synopsis}",
-                    tags: [@for(tag in movie.tags) "${tag}", @endfor],
-                    rating: ${movie.rating},
-                    tomatoMeter: ${movie.tomatoMeter},
-                    dateAdded: "${movie.dateAdded.toString()}"
-                },
-            @endfor
-        ]));
+        document.addEventListener("DOMContentLoaded", () => startVue($unsafe{movieJson}));
     </script>
 `)

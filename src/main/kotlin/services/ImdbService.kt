@@ -1,6 +1,7 @@
 package eden.movieq.services
 
 import eden.movieq.models.FullTitleInfo
+import eden.movieq.models.ImageInfo
 import eden.movieq.models.SearchResult
 import eden.movieq.models.TitleInfo
 import io.ktor.client.HttpClient

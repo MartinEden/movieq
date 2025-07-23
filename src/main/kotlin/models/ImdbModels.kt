@@ -31,7 +31,7 @@ data class FullTitleInfo(
     val isAdult: Boolean? = false,
     val primaryTitle: String,
     val originalTitle: String? = null,
-    val primaryImage: ImageInfo = ImageInfo.default,
+    val primaryImage: ImageInfo? = null,
     val startYear: Int? = null,
     val endYear: Int? = null,
     val runtimeSeconds: Int? = null,
