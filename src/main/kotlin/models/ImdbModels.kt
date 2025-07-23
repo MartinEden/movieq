@@ -16,7 +16,7 @@ data class TitleInfo(
     val rating: RatingInfo? = null,
 )
 @Serializable
-data class ImageInfo(val url: String, val width: Int, val height: Int) {
+data class ImageInfo(val url: String, val width: Int, val height: Int, val type: String? = null) {
     companion object {
         val default = ImageInfo("/static/no-image.png", 300, 200)
     }
@@ -50,3 +50,10 @@ data class MetacriticInfo(
 )
 @Serializable
 data class Country(val code: String? = null, val name: String? = null)
+
+@Serializable
+data class ImageSearchResult(
+    val images: List<ImageInfo>,
+    val totalCount: Int,
+    val nextPageToken: String? = null
+)

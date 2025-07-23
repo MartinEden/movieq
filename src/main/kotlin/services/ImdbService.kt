@@ -3,6 +3,7 @@ package eden.movieq.services
 import eden.movieq.MovieQApp
 import eden.movieq.models.FullTitleInfo
 import eden.movieq.models.ImageInfo
+import eden.movieq.models.ImageSearchResult
 import eden.movieq.models.Movie
 import eden.movieq.models.SearchResult
 import eden.movieq.models.TitleInfo
@@ -38,8 +39,8 @@ class ImdbService(val endpointURL: String) {
         return result.titles
     }
 
-    private fun downloadThumbnailAndGetPath(movieId: String, info: ImageInfo?): String {
-        // TODO: Use /titles/{titleId}/images with posters parameter to get a poster image
+    private fun downloadThumbnailAndGetPath(movieId: String): String {
+        val info = getPosterUrl(movieId)
         return if (info != null) {
             runBlocking {
                 val file = File(MovieQApp.thumbnailPath, movieId)
@@ -49,6 +50,16 @@ class ImdbService(val endpointURL: String) {
         } else {
             ImageInfo.default.url
         }
+    }
+
+    private fun getPosterUrl(movieId: String): ImageInfo? {
+        val images: ImageSearchResult = runBlocking {
+            client.get("$endpointURL/titles/$movieId/images") {
+                parameter("type", "POSTER")
+                parameter("pageSize", 1)
+            }.body()
+        }
+        return images.images.firstOrNull()
     }
 
     fun get(movieId: String, reason: String): Movie {
@@ -65,7 +76,7 @@ class ImdbService(val endpointURL: String) {
             dateAdded = LocalDate.now(),
             rating = title.rating?.aggregateRating?.times(10)?.toInt(),
             tomatoMeter = null, // TODO: Tomato Meter
-            thumbnail = downloadThumbnailAndGetPath(movieId, title.primaryImage),
+            thumbnail = downloadThumbnailAndGetPath(movieId),
             tags = title.genres.map { it.lowercase() }
         )
     }
