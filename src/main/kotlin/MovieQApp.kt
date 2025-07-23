@@ -1,7 +1,5 @@
 package eden.movieq
 
-import eden.movieq.models.ImageInfo
-import eden.movieq.models.Movie
 import eden.movieq.services.ImdbService
 import eden.movieq.services.StorageService
 import gg.jte.ContentType
@@ -12,7 +10,6 @@ import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
 import io.javalin.rendering.template.JavalinJte
 import kotlinx.serialization.json.Json
-import java.time.LocalDate
 
 class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
     private val serializer = Json { prettyPrint = true }
@@ -46,19 +43,8 @@ class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
     fun saveHandler(ctx: Context) {
         val id = ctx.formParam("movieId") ?: throw Exception("No movieId was provided")
         val reason = ctx.formParam("reason") ?: throw Exception("No reason was provided")
-        val title = imdbService.get(id) ?: throw Exception("Couldn't find title $id in IMDB service")
-        store.save(Movie(
-            imdbId = id,
-            reason = reason,
-            title = title.primaryTitle,
-            synopsis = "MISSING", // TODO: Synopsis
-            year = title.startYear,
-            dateAdded = LocalDate.now(),
-            rating = title.rating?.aggregateRating?.times(10)?.toInt(),
-            tomatoMeter = null, // TODO: Tomato Meter
-            thumbnail = title.primaryImage?.url ?: ImageInfo.default.url, // TODO: Cache lower resolution version locally
-            tags = listOf("tag1", "tag2"), // TODO: Tags
-        ))
+        val movie = imdbService.get(id, reason)
+        store.save(movie)
         ctx.redirect("/")
     }
 
@@ -72,5 +58,10 @@ class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
             staticFiles.location = Location.CLASSPATH
             staticFiles.mimeTypes.add(io.javalin.http.ContentType.JAVASCRIPT, "static/js")
         }
+    }
+
+    companion object {
+        val thumbnailPath: String = MovieQApp::class.java.classLoader.getResource("static/thumbnails")?.file
+            ?: throw Exception("Unable to get thumbnail directory")
     }
 }
