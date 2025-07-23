@@ -1,5 +1,6 @@
 @param query: String
 @param reason: String
+@param maxResults: Int
 @param titles: List<eden.movieq.models.TitleInfo>
 
 @template.layout(content = @`
@@ -26,4 +27,11 @@
             </div>
         </div>
     @endfor
+
+    <form action="/lookup/" method="get">
+        <input type="hidden" name="query" value="${query}" />
+        <input type="hidden" name="reason" value="${reason}" />
+        <input type="hidden" name="maxResults" value="${maxResults * 2}" />
+        <button type="submit">Load more results</button>
+    </form>
 `,)

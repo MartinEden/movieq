@@ -26,11 +26,12 @@ class ImdbService(val endpointURL: String) {
         }
     }
 
-    fun search(query: String): List<TitleInfo> {
+    fun search(query: String, maxResults: Int = 3): List<TitleInfo> {
         val result: SearchResult = runBlocking {
             client.get("$endpointURL/search/titles") {
                 url {
                     parameter("query", query)
+                    parameter("limit", maxResults)
                 }
             }.body()
         }
@@ -38,6 +39,7 @@ class ImdbService(val endpointURL: String) {
     }
 
     private fun downloadThumbnailAndGetPath(movieId: String, info: ImageInfo?): String {
+        // TODO: Use /titles/{titleId}/images with posters parameter to get a poster image
         return if (info != null) {
             runBlocking {
                 val file = File(MovieQApp.thumbnailPath, movieId)
