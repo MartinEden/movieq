@@ -15,7 +15,11 @@
     <!-- TODO: Edit reason -->
     <!-- TODO: Edit tags -->
     <div id="vueApp">
-        <div class="card" v-for="movie in movies">
+        Sort:
+        <a href="#" @click="setSortMode('dateAdded')">Date added</a> |
+        <a href="#" @click="setSortMode('rating')">IMDB rating</a>
+
+        <div class="card" v-for="movie in filteredMovies" :key="movie.imdbId">
             <div class="thumbnail">
                 <img :src="movie.thumbnail" />
             </div>

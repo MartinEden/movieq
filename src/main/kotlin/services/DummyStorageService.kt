@@ -32,7 +32,7 @@ class DummyStorageService : StorageService {
             reason = "Recommended by everyone on the /badmovies subreddit; seemed hilarious",
             synopsis = "Arthur is a businessman. One day he finds a massive sword and discovers his true destiny...",
             year = 1905,
-            rating = 23,
+            rating = 99,
             tomatoMeter = 11,
             thumbnail = ImageInfo.default.url,
             tags = listOf("fantasy", "action", "romance")
