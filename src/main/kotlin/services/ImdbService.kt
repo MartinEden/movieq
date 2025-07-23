@@ -58,13 +58,13 @@ class ImdbService(val endpointURL: String) {
             imdbId = movieId,
             reason = reason,
             title = title.primaryTitle,
-            synopsis = "MISSING", // TODO: Synopsis
+            synopsis = title.plot ?: "",
             year = title.startYear,
             dateAdded = LocalDate.now(),
             rating = title.rating?.aggregateRating?.times(10)?.toInt(),
             tomatoMeter = null, // TODO: Tomato Meter
             thumbnail = downloadThumbnailAndGetPath(movieId, title.primaryImage),
-            tags = listOf("tag1", "tag2"), // TODO: Tags
+            tags = title.genres.map { it.lowercase() }
         )
     }
 }
