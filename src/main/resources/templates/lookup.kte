@@ -5,6 +5,7 @@
 @template.layout(content = @`
     Results for "${query}":
 
+    <!--suppress HtmlUnknownTarget -->
     <form name="saveMovie" action="/save/" method="post">
         <input type="hidden" name="reason" value="${reason}" />
         <input type="hidden" name="movieId" />
@@ -13,7 +14,7 @@
     @for(title in titles)
         <div class="card card-clickable" onclick="saveMovieCallback('${title.id}');">
             <div class="thumbnail">
-                <img src="${title.primaryImage.url}" />
+                <img src="${title.primaryImage.url}" alt="Thumbnail for ${title.primaryTitle}" />
             </div>
             <div class="card-main">
                 <div class="title">
