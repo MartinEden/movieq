@@ -1,17 +1,14 @@
 package eden.movieq.services
 
 import eden.movieq.models.FullTitleInfo
-import eden.movieq.models.ImageInfo
 import eden.movieq.models.SearchResult
 import eden.movieq.models.TitleInfo
-import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
-import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
 
 class ImdbService(val endpointURL: String) {

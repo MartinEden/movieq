@@ -2,6 +2,7 @@
 @param movieJson: String
 
 @template.layout(content = @`
+    <!--suppress HtmlRequiredAltAttribute, HtmlUnknownTarget -->
     <form action="/lookup/" method="get">
         <input type="text" name="query" placeholder="Movie title" />
         <textarea name="reason" placeholder="Why this movie in particular?"></textarea>
