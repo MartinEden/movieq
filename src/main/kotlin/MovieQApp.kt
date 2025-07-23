@@ -46,6 +46,7 @@ class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
             staticFiles.hostedPath = "/static"
             staticFiles.directory = "static"
             staticFiles.location = Location.CLASSPATH
+            staticFiles.mimeTypes.add(io.javalin.http.ContentType.JAVASCRIPT, "static/js")
         }
     }
 }

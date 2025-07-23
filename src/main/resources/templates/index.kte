@@ -12,41 +12,54 @@
     <!-- TODO: Mark movies as seen -->
     <!-- TODO: Edit reason -->
     <!-- TODO: Edit tags -->
-    <div>
-        @for(movie in movies)
-            <div class="card">
-                <div class="thumbnail">
-                    <img src="${movie.thumbnail}" />
+    <div id="vueApp">
+        <div class="card" v-for="movie in movies">
+            <div class="thumbnail">
+                <img :src="movie.thumbnail" />
+            </div>
+            <div class="card-main">
+                <div class="title">
+                    {{ movie.title }}
+                    <span v-if="movie.year" class="year">({{ movie.year }})</span>
                 </div>
-                <div class="card-main">
-                    <div class="title">
-                        ${movie.title}
-                        @if(movie.year != null)
-                            <span class="year">(${movie.year})</span>
-                        @endif
-                    </div>
-                    <div class="reason">
-                        "${movie.reason}"
-                    </div>
-                    <div class="synopsis">
-                        ${movie.synopsis}
-                    </div>
-                    <div class="tags">
-                        @for(tag in movie.tags)
-                            <span class="tag">${tag}</span>
-                        @endfor
-                    </div>
+                <div class="reason">
+                    "{{ movie.reason }}"
                 </div>
-                <div class="rating">
-                    <img src="/static/imdb.png" alt="IMDB rating" />
-                    ${movie.rating}%
-                    <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
-                    ${movie.tomatoMeter}%
+                <div class="synopsis">
+                    {{ movie.synopsis }}
                 </div>
-                <div class="date">
-                    ${movie.dateAdded.toString()}
+                <div class="tags">
+                    <span class="tag" v-for="tag in movie.tags">{{ tag }}</span>
                 </div>
             </div>
-        @endfor
+            <div class="rating">
+                <img src="/static/imdb.png" alt="IMDB rating" />
+                {{ movie.rating }}%
+                <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
+                {{ movie.tomatoMeter }}%
+            </div>
+            <div class="date">
+                {{ movie.dateAdded }}
+            </div>
+        </div>
     </div>
+    <script type="module" src="/static/js/index.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => startVue([
+            @for(movie in movies)
+                {
+                    imdbId: "${movie.imdbId}",
+                    title: "${movie.title}",
+                    thumbnail: "${movie.thumbnail}",
+                    year: ${movie.year},
+                    reason: "${movie.reason}",
+                    synopsis: "${movie.synopsis}",
+                    tags: [@for(tag in movie.tags) "${tag}", @endfor],
+                    rating: ${movie.rating},
+                    tomatoMeter: ${movie.tomatoMeter},
+                    dateAdded: "${movie.dateAdded.toString()}"
+                },
+            @endfor
+        ]));
+    </script>
 `)
