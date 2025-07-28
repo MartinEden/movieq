@@ -1,5 +1,5 @@
-@param movies: Iterable<eden.movieq.models.Movie>
-@param movieJson: String
+@param movies: String
+@param allTags: String
 
 @template.layout(content = @`
     <!--suppress HtmlRequiredAltAttribute, HtmlUnknownTarget, HtmlUnknownAttribute -->
@@ -9,7 +9,6 @@
         <button type="submit">Add</button>
     </form>
 
-    <!-- TODO: Add filtering by tags -->
     <!-- TODO: Mark movies as seen -->
     <!-- TODO: Edit reason -->
     <!-- TODO: Edit tags -->
@@ -23,6 +22,13 @@
                 </span>
             </a> |
         </span>
+
+        <div class="tags">
+            <!-- TODO: Render tag status -->
+            <!-- TODO: Change tag status on click -->
+            <!-- TODO: Make tag status filter movies -->
+            <span class="tag" v-for="tag in Object.keys(tags)">{{ tag }}{{ tags[tag] }}</span>
+        </div>
 
         <div class="card" v-for="movie in filteredMovies" :key="movie.imdbId">
             <div class="thumbnail">
@@ -60,6 +66,6 @@
     </div>
     <script type="module" src="/static/js/index.js"></script>
     <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => startVue($unsafe{movieJson}));
+        document.addEventListener("DOMContentLoaded", () => startVue($unsafe{movies}, $unsafe{allTags}));
     </script>
 `)

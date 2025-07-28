@@ -24,8 +24,8 @@ class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
 
     fun indexHandler(ctx: Context) {
         ctx.render("index.kte", mapOf(
-            "movies" to store.all,
-            "movieJson" to serializer.encodeToString(store.all.toList().toTypedArray())
+            "movies" to serializeList(store.all),
+            "allTags" to serializeList(store.tags),
         ))
     }
 
@@ -61,6 +61,8 @@ class MovieQApp(val imdbService: ImdbService, val store: StorageService) {
             staticFiles.mimeTypes.add(io.javalin.http.ContentType.JAVASCRIPT, "static/js")
         }
     }
+
+    private inline fun <reified T> serializeList(list: Iterable<T>) = serializer.encodeToString(list.toList().toTypedArray())
 
     companion object {
         val thumbnailPath: String = MovieQApp::class.java.classLoader.getResource("static/thumbnails")?.file

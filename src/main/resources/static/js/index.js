@@ -1,6 +1,6 @@
 import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.prod.js'
 
-window.startVue = function(movies) {
+window.startVue = function(movies, allTags) {
     var sortFunction = function(sortMode) {
         if (sortMode == "dateAdded") {
             return (a, b) => a.dateAdded.localeCompare(b.dateAdded);
@@ -25,7 +25,8 @@ window.startVue = function(movies) {
                 movies: movies,
                 sortMode: "dateAdded",
                 sortModes: sortModes,
-                sortReversed: false
+                sortReversed: false,
+                tags: Object.fromEntries(allTags.map(t => [t, 0])),
             }
         },
         methods: {

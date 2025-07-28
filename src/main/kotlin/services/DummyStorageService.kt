@@ -11,6 +11,7 @@ class DummyStorageService : StorageService {
     }
 
     override val all get() = movies
+    override val tags get() = movies.flatMap { it.tags }.distinct().sortedBy { it }
 
     private val movies: MutableList<Movie> = mutableListOf(
         Movie(
