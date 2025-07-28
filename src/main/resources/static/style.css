@@ -10,6 +10,10 @@ body {
     padding: 20px;
 }
 
+.movie-listing {
+    margin-top: 40px;
+}
+
 .card {
     position: relative;
     box-sizing: border-box;
@@ -77,6 +81,14 @@ body {
     right: 10px;
     bottom: 10px;
     color: rgb(164, 164, 164);
+}
+
+a.sortMode {
+    color: white;
+    text-decoration: none;
+}
+a.sortMode.selected {
+    font-weight: bold;
 }
 
 form {

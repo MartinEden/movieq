@@ -3,6 +3,7 @@
 <head>
     <title>MovieQ</title>
     <link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
     <script type="text/javascript">
         var saveMovieCallback = function(movieId) {
             var form = document.saveMovie;

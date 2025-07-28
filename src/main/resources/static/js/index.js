@@ -6,16 +6,25 @@ window.startVue = function(movies) {
             return (a, b) => a.dateAdded.localeCompare(b.dateAdded);
         } else if (sortMode == "rating") {
             return (a, b) => a.rating - b.rating;
+        } else if (sortMode == "tomato") {
+            return (a, b) => a.tomatoMeter - b.tomatoMeter;
         } else {
             throw Exception("Unknown sortMode " + sortMode);
         }
     }
+
+    var sortModes = [
+        { id: "dateAdded", text: "Date added" },
+        { id: "rating", text: "IMDB rating" },
+        { id: "tomato", text: "Tomatometer" },
+    ];
 
     createApp({
         data() {
             return {
                 movies: movies,
                 sortMode: "dateAdded",
+                sortModes: sortModes,
                 sortReversed: false
             }
         },
