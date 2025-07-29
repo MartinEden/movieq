@@ -11,6 +11,13 @@ window.startVue = function(movies, allTags) {
         } else {
             throw Exception("Unknown sortMode " + sortMode);
         }
+    };
+
+    var tagFilter = function(movie, tag) {
+        var { name, status } = tag;
+        return status == 0
+            || (status == 1 && movie.tags.includes(name))
+            || (status == -1 && !movie.tags.includes(name));
     }
 
     var sortModes = [
@@ -37,11 +44,22 @@ window.startVue = function(movies, allTags) {
                 } else {
                     this.sortReversed = !this.sortReversed;
                 }
+            },
+            toggleTag(tag) {
+                var x = this.tags[tag];
+                x++;
+                if (x > 1) {
+                    x = -1;
+                }
+                this.tags[tag] = x;
             }
         },
         computed: {
             filteredMovies() {
-                var sorted = this.movies.toSorted(sortFunction(this.sortMode));
+                var tags = Object.entries(this.tags).map(e => ({ name: e[0], status: e[1] }));
+                var filtered = this.movies.filter(m => tags.every(t => tagFilter(m, t)));
+
+                var sorted = filtered.toSorted(sortFunction(this.sortMode));
                 if (this.sortReversed) {
                     sorted.reverse();
                 }

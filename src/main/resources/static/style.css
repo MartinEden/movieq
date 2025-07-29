@@ -77,6 +77,29 @@ body {
     color: black;
 }
 
+.tag.tag-clickable {
+    cursor: pointer;
+}
+.tag.tag-clickable:hover {
+    background: rgb(230, 230, 230);
+}
+.tag.add {
+    font-weight: bold;
+    color: green;
+    border: 1px solid green;
+}
+.tag.add::before {
+    content: "+";
+}
+.tag.remove {
+    font-weight: bold;
+    color: red;
+    border: 1px solid red;
+}
+.tag.remove::before {
+    content: "−";
+}
+
 .card .date {
     position: absolute;
     right: 10px;
