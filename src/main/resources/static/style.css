@@ -4,6 +4,10 @@ body {
     font-size: 10pt;
 }
 
+a {
+    color: white;
+}
+
 .content {
     width: 600px;
     margin: 0 auto;

@@ -24,11 +24,11 @@
         </span>
 
         <div class="tags">
-            <!-- TODO: Button to clear filters -->
             <span v-for="tag in Object.keys(tags)"
                   class="tag tag-clickable"
                   @click="toggleTag(tag)"
                   :class="{ add: tags[tag] === 1, remove: tags[tag] === -1 }">{{ tag }}</span>
+            <a href="#" @click="clearFilters">Clear filters</a>
         </div>
 
         <div class="card" v-for="movie in filteredMovies" :key="movie.imdbId">

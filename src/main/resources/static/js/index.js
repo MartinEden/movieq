@@ -52,6 +52,11 @@ window.startVue = function(movies, allTags) {
                     x = -1;
                 }
                 this.tags[tag] = x;
+            },
+            clearFilters() {
+                for (var tag in this.tags) {
+                    this.tags[tag] = 0;
+                }
             }
         },
         computed: {
