@@ -46,3 +46,4 @@ bin/
 
 ### JTE generated code ###
 jte-classes/**
+/.movieq.db

@@ -27,6 +27,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.2.2")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+
+    implementation("org.jetbrains.exposed:exposed-core:1.0.0-beta-3")
+    implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-beta-3")
+    implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-3")
+    implementation("org.jetbrains.exposed:exposed-java-time:1.0.0-beta-3")
+    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 }
 
 tasks.test {
