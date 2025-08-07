@@ -32,7 +32,7 @@ window.startVue = function(movies, allTags) {
                 movies: movies,
                 sortMode: "dateAdded",
                 sortModes: sortModes,
-                sortReversed: false,
+                sortReversed: true,
                 tags: Object.fromEntries(allTags.map(t => [t, 0])),
             }
         },
