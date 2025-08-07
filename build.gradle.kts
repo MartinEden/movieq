@@ -33,6 +33,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-3")
     implementation("org.jetbrains.exposed:exposed-java-time:1.0.0-beta-3")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
+
+    implementation("com.fleeksoft.ksoup:ksoup:0.2.5")
 }
 
 tasks.test {

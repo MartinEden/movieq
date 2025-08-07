@@ -4,7 +4,7 @@ import eden.movieq.models.ImageInfo
 import eden.movieq.models.Movie
 import java.time.LocalDate
 
-// TODO: Real database storage
+@Suppress("unused")
 class DummyStorageService : StorageService {
     override fun save(movie: Movie) {
         movies.add(movie)
