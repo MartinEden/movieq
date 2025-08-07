@@ -41,6 +41,9 @@ data class FullTitleInfo(
     val plot: String? = null,
     val originCountries: List<Country> = emptyList(),
     val spokenLanguages: List<Country> = emptyList(),
+    val directors: List<Person> = emptyList(),
+    val writers: List<Person> = emptyList(),
+    val stars: List<Person> = emptyList()
 )
 @Serializable
 data class MetacriticInfo(
@@ -56,4 +59,13 @@ data class ImageSearchResult(
     val images: List<ImageInfo>,
     val totalCount: Int,
     val nextPageToken: String? = null
+)
+
+@Serializable
+data class Person(
+    val id: String,
+    val displayName: String? = null,
+    val primaryImage: ImageInfo? = null,
+    val alternativeNames: List<String> = emptyList(),
+    val primaryProfessions: List<String> = emptyList()
 )
