@@ -95,6 +95,8 @@ a {
 }
 
 .tag.tag-clickable {
+    font-size: 12pt;
+    padding: 7px;
     cursor: pointer;
 }
 .tag.tag-clickable:hover {
