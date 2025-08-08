@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/static/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/static/reel.png">
     <script type="text/javascript">
         var saveMovieCallback = function(movieId) {
             var form = document.saveMovie;
@@ -15,7 +16,10 @@
 </head>
 <body>
 <div class="content">
-    <h1 class="title">MovieQ</h1>
+    <header class="title">
+        MovieQ
+        <img src="/static/reel.png" alt="" />
+    </header>
     ${content}
 </div>
 </body>

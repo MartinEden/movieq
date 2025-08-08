@@ -4,16 +4,22 @@
 }
 
 body {
-    background: rgb(0, 0, 40);
-    color: rgb(200, 200, 200);
+    background: url(/static/fancy-cushion.png);
+    color: white;
     font-size: 10pt;
+    margin: 0;
 }
 
-h1.title {
+header {
+    width: 100%;
+    color: rgb(251, 242, 54);
     font-family: Title;
     font-weight: bold;
     font-size: 30pt;
     margin: 10px 0;
+}
+header img {
+    height: 5vh;
 }
 
 a {
@@ -21,6 +27,7 @@ a {
 }
 
 .content {
+    background: black;
     width: 600px;
     margin: 0 auto;
     padding: 20px;
@@ -38,9 +45,17 @@ a {
     margin: 20px 0;
     background: white;
     color: black;
+    border-top: 5px solid rgb(251, 242, 54);
 }
 .card-clickable {
     cursor: pointer;
+}
+
+.card .date {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    color: rgb(164, 164, 164);
 }
 
 .card .thumbnail {
@@ -61,6 +76,7 @@ a {
 
 .card .title {
     font-size: 14pt;
+    max-width: 75%;
 }
 
 .card .year {
@@ -88,7 +104,7 @@ a {
 
 .tag {
     display: inline-block;
-    background: rgb(210, 210, 210);
+    background: rgb(251, 242, 54);
     padding: 5px;
     margin: 5px 5px 0 0;
     color: black;
@@ -119,12 +135,6 @@ a {
     content: "−";
 }
 
-.card .date {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    color: rgb(164, 164, 164);
-}
 
 a.sortMode {
     color: white;
