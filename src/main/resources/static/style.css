@@ -1,7 +1,19 @@
+@font-face {
+    font-family: "Title";
+    src: url(/static/Antonio-Regular.ttf);
+}
+
 body {
     background: rgb(0, 0, 40);
     color: rgb(200, 200, 200);
     font-size: 10pt;
+}
+
+h1.title {
+    font-family: Title;
+    font-weight: bold;
+    font-size: 30pt;
+    margin: 10px 0;
 }
 
 a {
@@ -48,7 +60,7 @@ a {
 }
 
 .card .title {
-    font-size: 16pt;
+    font-size: 14pt;
 }
 
 .card .year {
