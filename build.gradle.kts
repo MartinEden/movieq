@@ -1,10 +1,15 @@
 plugins {
     kotlin("jvm") version "2.1.21"
+    application
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.10")
 }
 
 group = "eden.movieq"
 version = "1.0-SNAPSHOT"
+
+application {
+    mainClass = "eden.movieq.MainKt"
+}
 
 repositories {
     mavenCentral()
@@ -39,7 +44,4 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(21)
 }
