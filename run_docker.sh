@@ -22,7 +22,7 @@ touch "$db_path"
 docker pull "martinseden/movieq:$1"
 docker run \
     -p 127.0.0.1:8080:8080 \
-    --rm \
+    -d \
     --name movieq \
     --mount type=bind,source="$db_path",target=/code/.movieq.db \
     --mount type=bind,source="$thumbnail_path",target=/code/build/resources/main/static/thumbnails \

@@ -10,7 +10,6 @@ RUN ./gradlew buildDependents
 
 EXPOSE 8080
 COPY src src/
-RUN ./gradlew build
+RUN ./gradlew installDist
 
-ENTRYPOINT ["./gradlew"]
-CMD [":run"]
+ENTRYPOINT ["./build/install/movieq/bin/movieq"]
