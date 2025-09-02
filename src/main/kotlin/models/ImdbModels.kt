@@ -43,7 +43,8 @@ data class FullTitleInfo(
     val spokenLanguages: List<Country> = emptyList(),
     val directors: List<Person> = emptyList(),
     val writers: List<Person> = emptyList(),
-    val stars: List<Person> = emptyList()
+    val stars: List<Person> = emptyList(),
+    val interests: List<Interest> = emptyList(),
 )
 @Serializable
 data class MetacriticInfo(
@@ -68,4 +69,11 @@ data class Person(
     val primaryImage: ImageInfo? = null,
     val alternativeNames: List<String> = emptyList(),
     val primaryProfessions: List<String> = emptyList()
+)
+
+@Serializable
+data class Interest(
+    val id: String,
+    val name: String,
+    val isSubgenre: Boolean = false
 )
