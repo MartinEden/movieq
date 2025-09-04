@@ -39,12 +39,13 @@ class ImdbService(val endpointURL: String) {
         return result.titles
     }
 
-    private fun downloadThumbnailAndGetPath(movieId: String): String {
-        val info = getPosterUrl(movieId)
+    private fun downloadThumbnailAndGetPath(movieId: String, fallback: ImageInfo?): String {
+        val info = getPosterUrl(movieId) ?: fallback
         return if (info != null) {
             runBlocking {
                 val file = File(MovieQApp.thumbnailPath, movieId)
                 client.get(info.url).bodyAsChannel().copyAndClose(file.writeChannel())
+                MovieQApp.logger.info("Saved thumbnail to ${file.path}")
                 "/static/thumbnails/$movieId"
             }
         } else {
@@ -55,7 +56,8 @@ class ImdbService(val endpointURL: String) {
     private fun getPosterUrl(movieId: String): ImageInfo? {
         val images: ImageSearchResult = runBlocking {
             client.get("$endpointURL/titles/$movieId/images") {
-                parameter("type", "POSTER")
+                parameter("types", "POSTER")
+                // This actually means how many images (URLs) to return
                 parameter("pageSize", 1)
             }.body()
         }
@@ -76,7 +78,7 @@ class ImdbService(val endpointURL: String) {
             dateAdded = LocalDate.now(),
             rating = title.rating?.aggregateRating?.times(10)?.toInt(),
             tomatoMeter = null, // Filled in later
-            thumbnail = downloadThumbnailAndGetPath(movieId),
+            thumbnail = downloadThumbnailAndGetPath(movieId, fallback = title.primaryImage),
             tags = title.genres.map { it.lowercase() }
         )
     }

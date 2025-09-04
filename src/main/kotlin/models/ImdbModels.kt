@@ -57,8 +57,8 @@ data class Country(val code: String? = null, val name: String? = null)
 
 @Serializable
 data class ImageSearchResult(
-    val images: List<ImageInfo>,
-    val totalCount: Int,
+    val images: List<ImageInfo> = emptyList(),
+    val totalCount: Int = 0,
     val nextPageToken: String? = null
 )
 
