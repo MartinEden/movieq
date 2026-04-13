@@ -3,6 +3,7 @@ package eden.movieq.services
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
+import eden.movieq.MovieQApp
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -22,11 +23,16 @@ class RottenTomatoesService(val endpointUrl: String = "https://www.rottentomatoe
         val url = getFilmURLFromSearch(title, year)
         if (url != null) {
             val html = getAndParse(url)
-            val rawScore = html.select("media-scorecard rt-text[slot=criticsScore]").text()
+            val rawScore = html.select("media-scorecard rt-text[slot=critics-score]").text()
             val match = Regex("""(\d+)%""").find(rawScore)
             if (match != null) {
                 return match.groupValues[1].toInt()
+            } else {
+                MovieQApp.logger.warn("Unable to retrieve RT score for '$title' from '$url'.")
+                MovieQApp.logger.warn("Searching in '$rawScore' did not produce a match")
             }
+        } else {
+            MovieQApp.logger.warn("No result for '$title' in RottenTomatoes search")
         }
         return null
     }
@@ -49,8 +55,21 @@ class RottenTomatoesService(val endpointUrl: String = "https://www.rottentomatoe
         val titleAnchor = row.select("a[slot=title]")
         return MovieSearchResult(
             title = titleAnchor.text().trim(),
-            year = row.attr("releaseYear").toIntOrNull(),
-            url = titleAnchor.attr("href"))
+            year = getYearFromRow(row),
+            url = titleAnchor.attr("href")
+        )
+    }
+
+    private fun getYearFromRow(row: Element): Int? {
+        val attributes = listOf("release-year", "start-year", "end-year")
+        for (attributeName in attributes) {
+            val year = row.attr(attributeName).toIntOrNull()
+            if (year != null) {
+                return year
+            }
+        }
+        MovieQApp.logger.warn("Unable to find any year in RottenTomatoes search result: $row")
+        return null
     }
 
     private fun getAndParse(urlString: String, block: HttpRequestBuilder.() -> Unit = {}): Document {
