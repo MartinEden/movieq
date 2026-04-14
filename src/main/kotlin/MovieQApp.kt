@@ -11,6 +11,9 @@ import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
 import io.javalin.rendering.template.JavalinJte
 import kotlinx.serialization.json.Json
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.io.File
 
 class MovieQApp(
     val imdbService: ImdbService,
@@ -64,10 +67,15 @@ class MovieQApp(
         val templateResolver = ResourceCodeResolver("templates", MovieQApp::class.java.classLoader)
         it.fileRenderer(JavalinJte(TemplateEngine.create(templateResolver, ContentType.Html)))
 
+        val static = File(THUMBNAIL_DIRECTORY)
+        if (!static.exists()) {
+            static.mkdirs()
+        }
+
         it.staticFiles.add { staticFiles ->
-            staticFiles.hostedPath = "/static"
-            staticFiles.directory = "static"
-            staticFiles.location = Location.CLASSPATH
+            staticFiles.hostedPath = STATIC_URL
+            staticFiles.directory = STATIC_DIRECTORY
+            staticFiles.location = Location.EXTERNAL
             staticFiles.mimeTypes.add(io.javalin.http.ContentType.JAVASCRIPT, "static/js")
         }
     }
@@ -76,7 +84,11 @@ class MovieQApp(
         serializer.encodeToString(list.toList().toTypedArray())
 
     companion object {
-        val thumbnailPath: String = MovieQApp::class.java.classLoader.getResource("static/thumbnails")?.file
-            ?: throw Exception("Unable to get thumbnail directory")
+        const val STATIC_URL = "/static"
+        const val STATIC_DIRECTORY = "static"
+        const val THUMBNAIL_DIRECTORY = "$STATIC_DIRECTORY/thumbnails"
+        const val DB_PATH = ".movieq.db"
+
+        val logger: Logger = LoggerFactory.getLogger(MovieQApp::class.java)
     }
 }

@@ -45,3 +45,14 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+
+val copyStaticWebResources by tasks.registering(Copy::class) {
+    from(layout.projectDirectory.dir("src/main/resources/static"))
+    into(layout.projectDirectory.dir("static"))
+}
+tasks.findByName("processResources")!!.dependsOn(copyStaticWebResources)
+
+val cleanStaticWebResources by tasks.registering(Delete::class) {
+    delete(layout.projectDirectory.dir("static"))
+}
+tasks.findByName("clean")!!.dependsOn(cleanStaticWebResources)

@@ -25,7 +25,7 @@ docker run \
     -d \
     --name movieq \
     --mount type=bind,source="$db_path",target=/code/.movieq.db \
-    --mount type=bind,source="$thumbnail_path",target=/code/build/resources/main/static/thumbnails \
+    --mount type=bind,source="$thumbnail_path",target=/code/static/thumbnails \
     "martinseden/movieq:$1"
 
 

@@ -1,5 +1,6 @@
 package eden.movieq.services
 
+import eden.movieq.MovieQApp
 import eden.movieq.models.Movie
 import eden.movieq.models.sql.*
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
@@ -14,7 +15,7 @@ import java.sql.Connection
 
 class SqliteStorageService : StorageService {
     init {
-        TransactionManager.defaultDatabase = Database.connect("jdbc:sqlite:.movieq.db", "org.sqlite.JDBC")
+        TransactionManager.defaultDatabase = Database.connect("jdbc:sqlite:${MovieQApp.DB_PATH}", "org.sqlite.JDBC")
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_SERIALIZABLE
         transaction {
             SchemaUtils.create(MoviesTable)

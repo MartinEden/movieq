@@ -43,7 +43,7 @@ class ImdbService(val endpointURL: String) {
         val info = getPosterUrl(movieId) ?: fallback
         return if (info != null) {
             runBlocking {
-                val file = File(MovieQApp.thumbnailPath, movieId)
+                val file = File(MovieQApp.THUMBNAIL_DIRECTORY, movieId)
                 client.get(info.url).bodyAsChannel().copyAndClose(file.writeChannel())
                 MovieQApp.logger.info("Saved thumbnail to ${file.path}")
                 "/static/thumbnails/$movieId"
