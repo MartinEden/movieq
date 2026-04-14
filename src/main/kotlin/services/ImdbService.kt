@@ -17,13 +17,14 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.cio.writeChannel
 import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.time.LocalDate
 
 class ImdbService(val endpointURL: String) {
     private val client: HttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
-            json()
+            json(Json { ignoreUnknownKeys = true })
         }
     }
 
@@ -39,14 +40,15 @@ class ImdbService(val endpointURL: String) {
         return result.titles
     }
 
-    private fun downloadThumbnailAndGetPath(movieId: String, fallback: ImageInfo?): String {
+    private fun downloadThumbnailAndGetPath(movieId: String, title: String, fallback: ImageInfo?): String {
         val info = getPosterUrl(movieId) ?: fallback
         return if (info != null) {
             runBlocking {
-                val file = File(MovieQApp.THUMBNAIL_DIRECTORY, movieId)
+                val fileName = generateThumbnailFileName(movieId, title)
+                val file = File(MovieQApp.THUMBNAIL_DIRECTORY, fileName)
                 client.get(info.url).bodyAsChannel().copyAndClose(file.writeChannel())
                 MovieQApp.logger.info("Saved thumbnail to ${file.path}")
-                "/static/thumbnails/$movieId"
+                "/static/thumbnails/$fileName"
             }
         } else {
             ImageInfo.default.url
@@ -78,8 +80,11 @@ class ImdbService(val endpointURL: String) {
             dateAdded = LocalDate.now(),
             rating = title.rating?.aggregateRating?.times(10)?.toInt(),
             tomatoMeter = null, // Filled in later
-            thumbnail = downloadThumbnailAndGetPath(movieId, fallback = title.primaryImage),
+            thumbnail = downloadThumbnailAndGetPath(movieId, title.primaryTitle, fallback = title.primaryImage),
             tags = title.genres.map { it.lowercase() }
         )
     }
+
+    fun generateThumbnailFileName(movieId: String, title: String)
+        = movieId + "-" + title.lowercase().replace(Regex("""\W+"""), "-");
 }

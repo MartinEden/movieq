@@ -87,7 +87,7 @@ class MovieQApp(
         const val STATIC_URL = "/static"
         const val STATIC_DIRECTORY = "static"
         const val THUMBNAIL_DIRECTORY = "$STATIC_DIRECTORY/thumbnails"
-        const val DB_PATH = ".movieq.db"
+        const val DB_PATH = "movieq.db"
 
         val logger: Logger = LoggerFactory.getLogger(MovieQApp::class.java)
     }

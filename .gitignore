@@ -1,4 +1,6 @@
 .gradle
+.movieq.db
+movieq.db
 build/
 static/
 !gradle/wrapper/gradle-wrapper.jar
@@ -47,4 +49,3 @@ bin/
 
 ### JTE generated code ###
 jte-classes/**
-/.movieq.db
