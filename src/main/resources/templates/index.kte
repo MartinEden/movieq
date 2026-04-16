@@ -36,29 +36,31 @@
                 <img :src="movie.thumbnail" />
             </div>
             <div class="card-main">
-                <div class="title">
-                    {{ movie.title }}
-                    <span v-if="movie.year" class="year">({{ movie.year }})</span>
+                <div class="text">
+                    <div class="title">
+                        {{ movie.title }}
+                        <span v-if="movie.year" class="year">({{ movie.year }})</span>
+                    </div>
+                    <div class="reason">
+                        "{{ movie.reason }}"
+                    </div>
+                    <div class="synopsis">
+                        {{ movie.synopsis }}
+                    </div>
+                    <div class="tags">
+                        <span class="tag" v-for="tag in movie.tags">{{ tag }}</span>
+                    </div>
                 </div>
-                <div class="reason">
-                    "{{ movie.reason }}"
+                <div class="rating">
+                    <span v-if="movie.rating">
+                        <img src="/static/imdb.png" alt="IMDB rating" />
+                        {{ movie.rating }}%
+                    </span>
+                        <span v-if="movie.tomatoMeter">
+                        <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
+                        {{ movie.tomatoMeter }}%
+                    </span>
                 </div>
-                <div class="synopsis">
-                    {{ movie.synopsis }}
-                </div>
-                <div class="tags">
-                    <span class="tag" v-for="tag in movie.tags">{{ tag }}</span>
-                </div>
-            </div>
-            <div class="rating">
-                <span v-if="movie.rating">
-                    <img src="/static/imdb.png" alt="IMDB rating" />
-                    {{ movie.rating }}%
-                </span>
-                <span v-if="movie.tomatoMeter">
-                    <img src="/static/tomato.png" alt="Rotten Tomatoes Tomatometer" />
-                    {{ movie.tomatoMeter }}%
-                </span>
             </div>
             <div class="date">
                 {{ movie.dateAdded }}

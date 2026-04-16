@@ -28,7 +28,7 @@ a {
 
 .content {
     background: black;
-    width: 600px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -38,6 +38,7 @@ a {
 }
 
 .card {
+    display: flex;
     position: relative;
     box-sizing: border-box;
     width: 100%;
@@ -59,7 +60,7 @@ a {
 }
 
 .card .thumbnail {
-    display: inline-block;
+    flex: 40px;
     max-width: 100px;
     max-height: 150px;
 }
@@ -68,10 +69,19 @@ a {
 }
 
 .card .card-main {
-    display: inline-block;
-    vertical-align: top;
-    width: 400px;
+    flex: 1;
+    display: flex;
     margin-left: 10px;
+}
+
+@media all and (max-width: 560px) {
+    .card .card-main {
+        flex-direction: column;
+    }
+
+    .card .card-main .text {
+        order: 2;
+    }
 }
 
 .card .title {
@@ -92,10 +102,9 @@ a {
 }
 
 .card .rating {
-    position: absolute;
-    right: 10px;
-    top: 10px;
+    flex: 5em;
     font-size: 14pt;
+    white-space: nowrap;
 }
 
 .tags {
