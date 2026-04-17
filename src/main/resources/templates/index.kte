@@ -40,6 +40,7 @@
                     <div class="title">
                         {{ movie.title }}
                         <span v-if="movie.year" class="year">({{ movie.year }})</span>
+                        <a :href="watchLink(movie)"><img class="icon" src="/static/play-movie.svg" /></a>
                     </div>
                     <div class="reason">
                         "{{ movie.reason }}"

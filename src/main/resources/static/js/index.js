@@ -57,6 +57,9 @@ window.startVue = function(movies, allTags) {
                 for (var tag in this.tags) {
                     this.tags[tag] = 0;
                 }
+            },
+            watchLink(movie) {
+                return "https://www.justwatch.com/uk/search?q=" + movie.title
             }
         },
         computed: {

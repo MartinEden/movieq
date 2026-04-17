@@ -86,7 +86,6 @@ a {
 
 .card .title {
     font-size: 14pt;
-    max-width: 75%;
 }
 
 .card .year {
@@ -102,7 +101,6 @@ a {
 }
 
 .card .rating {
-    flex: 5em;
     font-size: 14pt;
     white-space: nowrap;
 }
@@ -173,4 +171,11 @@ form input, form textarea {
     box-sizing: border-box;
     width: 100%;
     margin-bottom: 10px;
+}
+
+.icon {
+    display: inline-block;
+    vertical-align: center;
+    width: 20px;
+    margin-left: 0.5em;
 }
