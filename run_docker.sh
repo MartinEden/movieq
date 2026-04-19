@@ -7,6 +7,7 @@ if [ $# -lt 1 ]; then
 fi
 
 set -ex
+echo "DO NOT RUN AS ROOT"
 
 data_path=${HOME}/.movieq
 mkdir -p "$data_path"
@@ -24,7 +25,7 @@ docker run \
     -p 127.0.0.1:8080:8080 \
     -d \
     --name movieq \
-    --mount type=bind,source="$db_path",target=/code/.movieq.db \
+    --mount type=bind,source="$db_path",target=/code/movieq.db \
     --mount type=bind,source="$thumbnail_path",target=/code/static/thumbnails \
     "martinseden/movieq:$1"
 
