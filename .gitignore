@@ -1,6 +1,7 @@
 .gradle
 .movieq.db
 movieq.db
+movieq-backup/
 build/
 static/
 !gradle/wrapper/gradle-wrapper.jar
