@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.1.21"
+    kotlin("jvm") version "2.4.0"
     application
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.10")
 }
@@ -14,6 +14,8 @@ application {
 repositories {
     mavenCentral()
 }
+
+val exposedVersion = "1.3.0"
 
 dependencies {
     testImplementation(kotlin("test"))
@@ -33,10 +35,12 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
 
-    implementation("org.jetbrains.exposed:exposed-core:1.0.0-beta-3")
-    implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-beta-3")
-    implementation("org.jetbrains.exposed:exposed-dao:1.0.0-beta-3")
-    implementation("org.jetbrains.exposed:exposed-java-time:1.0.0-beta-3")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-migration-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-migration-jdbc:$exposedVersion")
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 
     implementation("com.fleeksoft.ksoup:ksoup:0.2.5")
