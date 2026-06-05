@@ -5,9 +5,9 @@ window.startVue = function(movies, allTags) {
         if (sortMode == "dateAdded") {
             return (a, b) => a.dateAdded.localeCompare(b.dateAdded);
         } else if (sortMode == "rating") {
-            return (a, b) => a.rating - b.rating;
+            return (a, b) => (a.rating ?? 0) - (b.rating ?? 0);
         } else if (sortMode == "tomato") {
-            return (a, b) => a.tomatoMeter - b.tomatoMeter;
+            return (a, b) => (a.tomatoMeter ?? 0) - (b.tomatoMeter ?? 0);
         } else {
             throw Exception("Unknown sortMode " + sortMode);
         }
