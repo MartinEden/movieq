@@ -3,14 +3,15 @@ package eden.movieq.services
 import eden.movieq.MovieQApp
 import eden.movieq.models.Movie
 import eden.movieq.models.sql.*
+import io.vavr.collection.Seq
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.dao.with
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.SizedCollection
-import org.jetbrains.exposed.v1.jdbc.addLogger
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
 import java.sql.Connection
 
 class SqliteStorageService : StorageService {
@@ -24,14 +25,16 @@ class SqliteStorageService : StorageService {
         }
     }
 
-    override val all get() = transaction {
-        addLogger(StdOutSqlLogger)
-        MovieEntity.all().with(MovieEntity::tags).toList().map { it.toMovie() }
-    }
-    override val tags get() = transaction {
-        addLogger(StdOutSqlLogger)
-        TagEntity.all().toList().map { it.name }
-    }
+    override val all
+        get() = transaction {
+            addLogger(StdOutSqlLogger)
+            MovieEntity.all().with(MovieEntity::tags).toList().map { it.toMovie() }
+        }
+    override val tags
+        get() = transaction {
+            addLogger(StdOutSqlLogger)
+            TagEntity.all().toList().map { it.name }
+        }
 
     override fun save(movie: Movie) {
         transaction {
@@ -55,6 +58,19 @@ class SqliteStorageService : StorageService {
                 thumbnail = movie.thumbnail
                 tags = SizedCollection(tagLookup.filterKeys { it in movie.tags }.map { it.value })
             }
+        }
+    }
+
+    fun migrate(): Unit = transaction {
+        addLogger(StdOutSqlLogger)
+        val migrations = MigrationUtils
+            .statementsRequiredForDatabaseMigration(MoviesTable, TagsTable)
+        val count = migrations.count()
+        if (count > 0) {
+            println("Applying $count database migration(s):")
+            migrations.forEach { exec(it) }
+        } else {
+            println("Database does not need migration")
         }
     }
 }

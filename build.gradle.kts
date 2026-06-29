@@ -44,6 +44,8 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 
     implementation("com.fleeksoft.ksoup:ksoup:0.2.5")
+
+    implementation("com.github.ajalt.clikt:clikt:5.1.0")
 }
 
 tasks.test {

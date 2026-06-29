@@ -5,6 +5,11 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
+name=martinseden/movieq
+full_name=$name:$1
+
 set -ex
-docker build . -t martinseden/movieq:$1
-docker push martinseden/movieq:$1
+docker build . -t $full_name
+docker tag $full_name $name:latest
+docker push $full_name
+docker push $name:latest

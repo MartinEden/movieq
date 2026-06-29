@@ -16,6 +16,7 @@ object MoviesTable : IntIdTable("movies") {
     val synopsis = text("synopsis")
     val year = integer("year").nullable()
     val dateAdded = date("dateAdded")
+    val dateWatched = date("dateWatched").nullable()
     val rating = integer("rating").nullable()
     val tomatoMeter = integer("tomatoMeter").nullable()
     val thumbnail = varchar("thumbnail", MAX_VARCHAR_LENGTH)
@@ -30,6 +31,7 @@ class MovieEntity(id: EntityID<Int>) : IntEntity(id) {
     var synopsis by MoviesTable.synopsis
     var year by MoviesTable.year
     var dateAdded by MoviesTable.dateAdded
+    val dateWatched by MoviesTable.dateWatched
     var rating by MoviesTable.rating
     var tomatoMeter by MoviesTable.tomatoMeter
     var thumbnail by MoviesTable.thumbnail
