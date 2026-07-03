@@ -3,7 +3,6 @@ package eden.movieq.services
 import eden.movieq.MovieQApp
 import eden.movieq.models.Movie
 import eden.movieq.models.sql.*
-import io.vavr.collection.Seq
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.dao.with
 import org.jetbrains.exposed.v1.jdbc.Database
@@ -36,7 +35,7 @@ class SqliteStorageService : StorageService {
             TagEntity.all().toList().map { it.name }
         }
 
-    override fun save(movie: Movie) {
+    override fun insert(movie: Movie) {
         transaction {
             addLogger(StdOutSqlLogger)
             val tagLookup = TagEntity.all().associateBy { it.name }.toMutableMap()

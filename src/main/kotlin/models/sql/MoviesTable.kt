@@ -44,6 +44,7 @@ class MovieEntity(id: EntityID<Int>) : IntEntity(id) {
         synopsis,
         year,
         dateAdded,
+        dateWatched,
         rating,
         tomatoMeter,
         thumbnail,

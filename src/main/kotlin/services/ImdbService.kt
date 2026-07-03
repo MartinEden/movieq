@@ -78,6 +78,7 @@ class ImdbService(val endpointURL: String) {
             synopsis = title.plot ?: "",
             year = title.startYear,
             dateAdded = LocalDate.now(),
+            dateWatched = null,
             rating = title.rating?.aggregateRating?.times(10)?.toInt(),
             tomatoMeter = null, // Filled in later
             thumbnail = downloadThumbnailAndGetPath(movieId, title.primaryTitle, fallback = title.primaryImage),

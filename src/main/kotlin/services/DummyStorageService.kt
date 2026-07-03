@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 @Suppress("unused")
 class DummyStorageService : StorageService {
-    override fun save(movie: Movie) {
+    override fun insert(movie: Movie) {
         movies.add(movie)
     }
 
@@ -18,6 +18,7 @@ class DummyStorageService : StorageService {
             imdbId = "dummy1",
             title = "A film about grass",
             dateAdded = LocalDate.of(2025, 5, 16),
+            dateWatched = null,
             reason = "I love gardening, and it stars Liam Neeson",
             synopsis = "In a touching memorial to gardening, everyone touches grass. But all is not as it seems in the rock garden...",
             year = 2025,
@@ -30,6 +31,7 @@ class DummyStorageService : StorageService {
             imdbId = "dummy2",
             title = "Excalibur 9",
             dateAdded = LocalDate.of(2022, 1, 31),
+            dateWatched = null,
             reason = "Recommended by everyone on the /badmovies subreddit; seemed hilarious",
             synopsis = "Arthur is a businessman. One day he finds a massive sword and discovers his true destiny...",
             year = 1905,

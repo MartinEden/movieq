@@ -1,5 +1,6 @@
 package eden.movieq
 
+import eden.movieq.models.Movie
 import eden.movieq.services.ImdbService
 import eden.movieq.services.RottenTomatoesService
 import eden.movieq.services.StorageService
@@ -14,6 +15,7 @@ import kotlinx.serialization.json.Json
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.LocalDate
 
 class MovieQApp(
     val imdbService: ImdbService,
@@ -27,6 +29,7 @@ class MovieQApp(
         app.get("", ::indexHandler)
         app.get("lookup", ::lookupHandler)
         app.post("save", ::saveHandler)
+        app.post("/movie/{imdbId}/mark-watched", ::markWatchedHandler)
         app.start(8080)
     }
 
@@ -59,8 +62,15 @@ class MovieQApp(
         val reason = ctx.formParam("reason") ?: throw Exception("No reason was provided")
         var movie = imdbService.get(id, reason)
         movie = movie.copy(tomatoMeter = rottenTomatoesService.getTomatoMeterFor(movie.title, movie.year))
-        store.save(movie)
+        store.insert(movie)
         ctx.redirect("/")
+    }
+
+    fun markWatchedHandler(ctx: Context) {
+        val imdbId = ctx.pathParam("imdbId")
+        val movie: Movie = store.get(imdbId)
+        movie.dateWatched = LocalDate.now()
+        store.saveChanges(movie)
     }
 
     private fun makeJavalin(): Javalin = Javalin.create {

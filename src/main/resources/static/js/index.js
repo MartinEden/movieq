@@ -60,12 +60,27 @@ window.startVue = function(movies, allTags) {
             },
             watchLink(movie) {
                 return "https://www.justwatch.com/uk/search?q=" + movie.title
+            },
+            async markWatched(movie) {
+                movie.dateWatched = new Date().toISOString();
+                try {
+                    const response = await fetch(`./movie/${movie.imdbId}/mark-watched/`, {method: 'post'});
+                    if (!response.ok) {
+                        throw new Error(`Response status: ${response.status}`);
+                    }
+                    // …
+                } catch (error) {
+                    console.log(error)
+                    alert(error.message);
+                }
             }
         },
         computed: {
             filteredMovies() {
                 var tags = Object.entries(this.tags).map(e => ({ name: e[0], status: e[1] }));
-                var filtered = this.movies.filter(m => tags.every(t => tagFilter(m, t)));
+                var filtered = this.movies
+                    .filter(m => tags.every(t => tagFilter(m, t)))
+                    .filter(m => m.dateWatched === null);
 
                 var sorted = filtered.toSorted(sortFunction(this.sortMode));
                 if (this.sortReversed) {

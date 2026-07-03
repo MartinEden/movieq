@@ -51,6 +51,7 @@
                     <div class="tags">
                         <span class="tag" v-for="tag in movie.tags">{{ tag }}</span>
                     </div>
+                    <button @click="markWatched(movie)">✓ I've watched this</button>
                 </div>
                 <div class="rating">
                     <span v-if="movie.rating">

@@ -13,6 +13,8 @@ data class Movie(
     val year: Int?,
     @Serializable(with = LocalDateSerializer::class)
     val dateAdded: LocalDate,
+    @Serializable(with = LocalDateSerializer::class)
+    var dateWatched: LocalDate?,
     // Out of 100
     val rating: Int? = null,
     // Out of 100
