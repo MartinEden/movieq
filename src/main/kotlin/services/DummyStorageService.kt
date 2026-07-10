@@ -1,6 +1,6 @@
 package eden.movieq.services
 
-import eden.movieq.models.ImageInfo
+import eden.movieq.models.imdb.ImageInfo
 import eden.movieq.models.Movie
 import java.time.LocalDate
 

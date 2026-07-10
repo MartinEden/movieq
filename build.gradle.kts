@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.4.0"
+    kotlin("jvm") version "2.3.0"
     application
     id("org.jetbrains.kotlin.plugin.serialization") version("1.6.10")
 }
@@ -23,8 +23,8 @@ dependencies {
     implementation("io.javalin:javalin:6.7.0")
     implementation("io.javalin:javalin-rendering:6.7.0")
 
-    implementation("gg.jte:jte:3.2.1")
-    implementation("gg.jte:jte-kotlin:3.2.1")
+    implementation("gg.jte:jte:3.2.4")
+    implementation("gg.jte:jte-kotlin:3.2.4")
 
     implementation("org.slf4j:slf4j-simple:2.0.16")
 

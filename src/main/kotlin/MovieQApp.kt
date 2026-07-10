@@ -1,9 +1,10 @@
 package eden.movieq
 
 import eden.movieq.models.Movie
-import eden.movieq.services.ImdbService
+import eden.movieq.services.MovieService
 import eden.movieq.services.RottenTomatoesService
 import eden.movieq.services.StorageService
+import eden.movieq.viewModels.LookupViewModel
 import gg.jte.ContentType
 import gg.jte.TemplateEngine
 import gg.jte.resolve.ResourceCodeResolver
@@ -18,7 +19,7 @@ import java.io.File
 import java.time.LocalDate
 
 class MovieQApp(
-    val imdbService: ImdbService,
+    val movieService: MovieService,
     val rottenTomatoesService: RottenTomatoesService,
     val store: StorageService
 ) {
@@ -44,15 +45,18 @@ class MovieQApp(
 
     fun lookupHandler(ctx: Context) {
         val query = ctx.queryParam("query") ?: throw Exception("No query was provided")
-        val maxResults = ctx.queryParam("maxResults")?.toInt() ?: 3
+        val moreResults = ctx.queryParam("moreResults")?.toInt() ?: 0
         val reason = ctx.queryParam("reason") ?: ""
-        val titles = imdbService.search(query, maxResults)
+        val searchResult = movieService.search(query, moreResults)
         ctx.render(
             "lookup.kte", mapOf(
-                "query" to query,
-                "reason" to reason,
-                "maxResults" to maxResults,
-                "titles" to titles,
+                "m" to LookupViewModel(
+                    query,
+                    reason,
+                    moreResults,
+                    searchResult.moreResultsAvailable,
+                    searchResult.movies
+                )
             )
         )
     }
@@ -60,17 +64,18 @@ class MovieQApp(
     fun saveHandler(ctx: Context) {
         val id = ctx.formParam("movieId") ?: throw Exception("No movieId was provided")
         val reason = ctx.formParam("reason") ?: throw Exception("No reason was provided")
-        var movie = imdbService.get(id, reason)
+        var movie = movieService.get(id, reason)
         movie = movie.copy(tomatoMeter = rottenTomatoesService.getTomatoMeterFor(movie.title, movie.year))
         store.insert(movie)
         ctx.redirect("/")
     }
 
     fun markWatchedHandler(ctx: Context) {
-        val imdbId = ctx.pathParam("imdbId")
-        val movie: Movie = store.get(imdbId)
-        movie.dateWatched = LocalDate.now()
-        store.saveChanges(movie)
+        TODO()
+//        val imdbId = ctx.pathParam("imdbId")
+//        val movie: Movie = store.get(imdbId)
+//        movie.dateWatched = LocalDate.now()
+//        store.saveChanges(movie)
     }
 
     private fun makeJavalin(): Javalin = Javalin.create {

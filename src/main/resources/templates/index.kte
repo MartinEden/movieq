@@ -55,7 +55,7 @@
                 </div>
                 <div class="rating">
                     <span v-if="movie.rating">
-                        <img src="/static/imdb.png" alt="IMDB rating" />
+                        <img src="/static/the_movie_db.png" alt="The Movie DB rating" />
                         {{ movie.rating }}%
                     </span>
                         <span v-if="movie.tomatoMeter">

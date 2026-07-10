@@ -1,9 +1,10 @@
-package eden.movieq.models
+package eden.movieq.models.imdb
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchResult(val titles: List<TitleInfo>)
+
 @Serializable
 data class TitleInfo(
     val id: String,
@@ -15,12 +16,14 @@ data class TitleInfo(
     val endYear: Int? = null,
     val rating: RatingInfo? = null,
 )
+
 @Serializable
 data class ImageInfo(val url: String, val width: Int, val height: Int, val type: String? = null) {
     companion object {
         val default = ImageInfo("/static/no-image.png", 300, 200)
     }
 }
+
 @Serializable
 data class RatingInfo(val aggregateRating: Double, val voteCount: Long)
 
@@ -46,12 +49,14 @@ data class FullTitleInfo(
     val stars: List<Person> = emptyList(),
     val interests: List<Interest> = emptyList(),
 )
+
 @Serializable
 data class MetacriticInfo(
     val url: String? = null,
     val score: Int? = null,
     val reviewCount: Int? = null
 )
+
 @Serializable
 data class Country(val code: String? = null, val name: String? = null)
 

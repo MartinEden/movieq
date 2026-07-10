@@ -1,58 +1,57 @@
 package eden.movieq.services
 
-import eden.movieq.MovieQApp
-import eden.movieq.models.FullTitleInfo
-import eden.movieq.models.ImageInfo
-import eden.movieq.models.ImageSearchResult
 import eden.movieq.models.Movie
-import eden.movieq.models.SearchResult
-import eden.movieq.models.TitleInfo
+import eden.movieq.models.MovieShortDetails
+import eden.movieq.models.imdb.FullTitleInfo
+import eden.movieq.models.imdb.ImageInfo
+import eden.movieq.models.imdb.ImageSearchResult
+import eden.movieq.models.imdb.SearchResult
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsChannel
 import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.cio.writeChannel
-import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import java.io.File
 import java.time.LocalDate
+import kotlin.math.pow
 
-class ImdbService(val endpointURL: String) {
+class ImdbService(val endpointURL: String): MovieService {
     private val client: HttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
     }
+    private val thumbnailClient = ThumbnailClient(client)
 
-    fun search(query: String, maxResults: Int = 3): List<TitleInfo> {
+    override fun search(query: String, moreResults: Int): ServiceSearchResult {
         val result: SearchResult = runBlocking {
-            client.get("$endpointURL/search/titles") {
+            val response = client.get("$endpointURL/search/titles") {
                 url {
                     parameter("query", query)
-                    parameter("limit", maxResults)
+                    parameter("limit", calculateMaxResults(moreResults))
                 }
-            }.body()
+            }
+            response.body()
         }
-        return result.titles
+        val movies = result.titles.map {
+            MovieShortDetails(
+                id = it.id,
+                title = it.primaryTitle,
+                imageUrl = it.primaryImage.url,
+                startYear = it.startYear
+            )
+        }
+        return ServiceSearchResult(movies, moreResultsAvailable = true)
     }
+
+    // Start off returning just 3 and then double every time moreResults is incremented
+    private fun calculateMaxResults(moreResults: Int) = (3 * 2.0.pow(moreResults)).toInt()
 
     private fun downloadThumbnailAndGetPath(movieId: String, title: String, fallback: ImageInfo?): String {
         val info = getPosterUrl(movieId) ?: fallback
-        return if (info != null) {
-            runBlocking {
-                val fileName = generateThumbnailFileName(movieId, title)
-                val file = File(MovieQApp.THUMBNAIL_DIRECTORY, fileName)
-                client.get(info.url).bodyAsChannel().copyAndClose(file.writeChannel())
-                MovieQApp.logger.info("Saved thumbnail to ${file.path}")
-                "/static/thumbnails/$fileName"
-            }
-        } else {
-            ImageInfo.default.url
-        }
+        return thumbnailClient.downloadThumbnailAndGetPath(movieId, title, info?.url)
     }
 
     private fun getPosterUrl(movieId: String): ImageInfo? {
@@ -66,7 +65,7 @@ class ImdbService(val endpointURL: String) {
         return images.images.firstOrNull()
     }
 
-    fun get(movieId: String, reason: String): Movie {
+    override fun get(movieId: String, reason: String): Movie {
         val title: FullTitleInfo = runBlocking {
             client.get("$endpointURL/titles/$movieId").body()
                 ?: throw Exception("Couldn't find title $movieId in IMDB service")
@@ -85,7 +84,4 @@ class ImdbService(val endpointURL: String) {
             tags = title.genres.map { it.lowercase() }
         )
     }
-
-    fun generateThumbnailFileName(movieId: String, title: String)
-        = movieId + "-" + title.lowercase().replace(Regex("""\W+"""), "-");
 }
