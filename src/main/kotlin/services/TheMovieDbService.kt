@@ -22,7 +22,10 @@ e.g. { "the_movie_db_token": "abcdedfg..." }
 """
 
 class TheMovieDbService(token: String?) : MovieService {
-    val endpointUrl = "https://api.themoviedb.org/3/"
+    private val endpointUrl = "https://api.themoviedb.org/3/"
+    private val imageEndpointUrl = "https://image.tmdb.org/t/p/"
+    private val imageSize = "w154"
+
     val token = token ?: throw Exception(missingTokenMessage)
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -51,7 +54,7 @@ class TheMovieDbService(token: String?) : MovieService {
             MovieShortDetails(
                 id = it.id.toString(),
                 title = it.title,
-                imageUrl = it.posterPath,   // TODO: Build the correct URL
+                imageUrl = "$imageEndpointUrl/$imageSize/${it.posterPath}",
                 startYear = LocalDate.parse(it.releaseDate).year
             )
         }
