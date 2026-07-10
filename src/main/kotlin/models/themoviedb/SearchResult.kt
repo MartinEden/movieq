@@ -15,5 +15,5 @@ data class SearchResult(
     val id: Int,
     val title: String,
     val posterPath: String?,
-    val releaseDate: String,
+    val releaseDate: String?,
 )
