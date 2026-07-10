@@ -17,6 +17,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
+import kotlin.math.roundToInt
 
 const val missingTokenMessage = """
 config.json must provide a bearer token for TheMovieDB. 
@@ -79,7 +80,7 @@ class TheMovieDbService(token: String?) : MovieService {
             synopsis = m.overview,
             year = yearFromDateString(m.releaseDate),
             dateAdded = java.time.LocalDate.now(),
-            rating = (m.voteAverage * 10).toInt(),
+            rating = (m.voteAverage * 10).roundToInt(),
             thumbnail = thumbnailClient.downloadThumbnailAndGetPath(
                 m.imdbId,
                 m.title,
