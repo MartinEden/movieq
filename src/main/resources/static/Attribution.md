@@ -1,0 +1,1 @@
+play-movie.svg is used via CC license. See https://www.svgrepo.com/svg/389960/cinema-play-screen-movie

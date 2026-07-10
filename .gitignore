@@ -5,7 +5,7 @@ movieq-backup/
 backup_movieq.sh
 /config.json
 build/
-static/
+/static/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
