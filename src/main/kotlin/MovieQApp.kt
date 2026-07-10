@@ -41,14 +41,14 @@ class MovieQApp(
 
     fun lookupHandler(ctx: Context) {
         val query = ctx.queryParam("query") ?: throw Exception("No query was provided")
-        val maxResults = ctx.queryParam("maxResults")?.toInt() ?: 3
+        val moreResults = ctx.queryParam("moreResults")?.toInt() ?: 0
         val reason = ctx.queryParam("reason") ?: ""
-        val titles = movieService.search(query, maxResults)
+        val titles = movieService.search(query, moreResults)
         ctx.render(
             "lookup.kte", mapOf(
                 "query" to query,
                 "reason" to reason,
-                "maxResults" to maxResults,
+                "moreResults" to moreResults,
                 "titles" to titles,
             )
         )

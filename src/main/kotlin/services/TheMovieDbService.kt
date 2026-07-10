@@ -35,14 +35,14 @@ class TheMovieDbService(token: String?) : MovieService {
         }
     }
 
-    override fun search(query: String, maxResults: Int): List<MovieShortDetails> {
-        // TODO: Don't ignore maxResults
+    override fun search(query: String, moreResults: Int): List<MovieShortDetails> {
         val result: SearchResultCollection = callAPI {
             runBlocking {
                 client.get("$endpointUrl/search/movie") {
                     bearerAuth(token)
                     url {
                         parameter("query", query)
+                        parameter("page", moreResults + 1)
                     }
                 }
             }

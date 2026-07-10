@@ -1,6 +1,6 @@
 @param query: String
 @param reason: String
-@param maxResults: Int
+@param moreResults: Int
 @param titles: List<eden.movieq.models.MovieShortDetails>
 
 @template.layout(content = @`
@@ -31,7 +31,8 @@
     <form action="/lookup/" method="get">
         <input type="hidden" name="query" value="${query}" />
         <input type="hidden" name="reason" value="${reason}" />
-        <input type="hidden" name="maxResults" value="${maxResults * 2}" />
+        <input type="hidden" name="moreResults" value="${moreResults + 1}" />
+        <!-- TODO: Only show if there are more pages -->
         <button type="submit">Load more results</button>
     </form>
 `,)

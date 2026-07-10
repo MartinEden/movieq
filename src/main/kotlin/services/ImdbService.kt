@@ -20,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.time.LocalDate
+import kotlin.math.pow
 
 class ImdbService(val endpointURL: String): MovieService {
     private val client: HttpClient = HttpClient(CIO) {
@@ -28,12 +29,12 @@ class ImdbService(val endpointURL: String): MovieService {
         }
     }
 
-    override fun search(query: String, maxResults: Int): List<MovieShortDetails> {
+    override fun search(query: String, moreResults: Int): List<MovieShortDetails> {
         val result: SearchResult = runBlocking {
             val response = client.get("$endpointURL/search/titles") {
                 url {
                     parameter("query", query)
-                    parameter("limit", maxResults)
+                    parameter("limit", calculateMaxResults(moreResults))
                 }
             }
             response.body()
@@ -47,6 +48,9 @@ class ImdbService(val endpointURL: String): MovieService {
             )
         }
     }
+
+    // Start off returning just 3 and then double every time moreResults is incremented
+    private fun calculateMaxResults(moreResults: Int) = (3 * 2.0.pow(moreResults)).toInt()
 
     private fun downloadThumbnailAndGetPath(movieId: String, title: String, fallback: ImageInfo?): String {
         val info = getPosterUrl(movieId) ?: fallback
