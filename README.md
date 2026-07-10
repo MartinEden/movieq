@@ -1,5 +1,5 @@
 # MovieQ
-Web app to track movies you want to watch, with automatic lookup of various details from IMDB and score from 
+Web app to track movies you want to watch, with automatic lookup of various details from The Movie DB and score from 
 RottenTomatoes.
 
 # Compile and run from source

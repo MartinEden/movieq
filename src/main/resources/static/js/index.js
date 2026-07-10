@@ -22,7 +22,7 @@ window.startVue = function(movies, allTags) {
 
     var sortModes = [
         { id: "dateAdded", text: "Date added" },
-        { id: "rating", text: "IMDB rating" },
+        { id: "rating", text: "Movie DB rating" },
         { id: "tomato", text: "Tomatometer" },
     ];
 
