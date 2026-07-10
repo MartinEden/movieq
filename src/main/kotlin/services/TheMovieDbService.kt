@@ -1,6 +1,5 @@
 package eden.movieq.services
 
-import eden.movieq.MovieQApp
 import eden.movieq.models.Movie
 import eden.movieq.models.MovieShortDetails
 import eden.movieq.models.imdb.ImageInfo
@@ -13,14 +12,11 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.cio.writeChannel
-import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
-import java.io.File
 
 const val missingTokenMessage = """
 config.json must provide a bearer token for TheMovieDB. 
@@ -32,7 +28,7 @@ class TheMovieDbService(token: String?) : MovieService {
     private val imageEndpointUrl = "https://image.tmdb.org/t/p/"
     private val imageSize = "w154"
 
-    val token = token ?: throw Exception(missingTokenMessage)
+    private val token = token ?: throw Exception(missingTokenMessage)
 
     @OptIn(ExperimentalSerializationApi::class)
     private val client: HttpClient = HttpClient(CIO) {
@@ -43,6 +39,8 @@ class TheMovieDbService(token: String?) : MovieService {
             })
         }
     }
+
+    private val thumbnailClient = ThumbnailClient(client)
 
     override fun search(query: String, moreResults: Int): List<MovieShortDetails> {
         val result: SearchResultCollection = callAPI {
@@ -82,29 +80,14 @@ class TheMovieDbService(token: String?) : MovieService {
             year = yearFromDateString(m.releaseDate),
             dateAdded = java.time.LocalDate.now(),
             rating = (m.voteAverage * 10).toInt(),
-            thumbnail = downloadThumbnailAndGetPath(m.imdbId, m.title, m.posterPath),
+            thumbnail = thumbnailClient.downloadThumbnailAndGetPath(
+                m.imdbId,
+                m.title,
+                absoluteImageUrl(m.posterPath)
+            ),
             tags = m.genres.map { it.name.lowercase() }
         )
     }
-
-    // TODO: Most of this is duplicated with ImdbService and really has nothing to do with either service
-    private fun downloadThumbnailAndGetPath(imdbId: String, title: String, posterPath: String?): String {
-        return if (posterPath != null) {
-            runBlocking {
-                val fileName = generateThumbnailFileName(imdbId, title)
-                val file = File(MovieQApp.THUMBNAIL_DIRECTORY, fileName)
-                val posterUrl = absoluteImageUrl(posterPath)
-                client.get(posterUrl).bodyAsChannel().copyAndClose(file.writeChannel())
-                MovieQApp.logger.info("Saved thumbnail to ${file.path}")
-                "/static/thumbnails/$fileName"
-            }
-        } else {
-            ImageInfo.default.url
-        }
-    }
-
-    fun generateThumbnailFileName(imdbId: String, title: String)
-            = imdbId + "-" + title.lowercase().replace(Regex("""\W+"""), "-");
 
     private fun yearFromDateString(date: String?): Int? = if (date.isNullOrBlank()) {
         null
