@@ -25,7 +25,7 @@ class ImdbService(val endpointURL: String): MovieService {
     }
     private val thumbnailClient = ThumbnailClient(client)
 
-    override fun search(query: String, moreResults: Int): List<MovieShortDetails> {
+    override fun search(query: String, moreResults: Int): ServiceSearchResult {
         val result: SearchResult = runBlocking {
             val response = client.get("$endpointURL/search/titles") {
                 url {
@@ -35,7 +35,7 @@ class ImdbService(val endpointURL: String): MovieService {
             }
             response.body()
         }
-        return result.titles.map {
+        val movies = result.titles.map {
             MovieShortDetails(
                 id = it.id,
                 title = it.primaryTitle,
@@ -43,6 +43,7 @@ class ImdbService(val endpointURL: String): MovieService {
                 startYear = it.startYear
             )
         }
+        return ServiceSearchResult(movies, moreResultsAvailable = true)
     }
 
     // Start off returning just 3 and then double every time moreResults is incremented

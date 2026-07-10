@@ -3,6 +3,7 @@ package eden.movieq
 import eden.movieq.services.MovieService
 import eden.movieq.services.RottenTomatoesService
 import eden.movieq.services.StorageService
+import eden.movieq.viewModels.LookupViewModel
 import gg.jte.ContentType
 import gg.jte.TemplateEngine
 import gg.jte.resolve.ResourceCodeResolver
@@ -43,13 +44,16 @@ class MovieQApp(
         val query = ctx.queryParam("query") ?: throw Exception("No query was provided")
         val moreResults = ctx.queryParam("moreResults")?.toInt() ?: 0
         val reason = ctx.queryParam("reason") ?: ""
-        val titles = movieService.search(query, moreResults)
+        val searchResult = movieService.search(query, moreResults)
         ctx.render(
             "lookup.kte", mapOf(
-                "query" to query,
-                "reason" to reason,
-                "moreResults" to moreResults,
-                "titles" to titles,
+                "m" to LookupViewModel(
+                    query,
+                    reason,
+                    moreResults,
+                    searchResult.moreResultsAvailable,
+                    searchResult.movies
+                )
             )
         )
     }

@@ -43,19 +43,20 @@ class TheMovieDbService(token: String?) : MovieService {
 
     private val thumbnailClient = ThumbnailClient(client)
 
-    override fun search(query: String, moreResults: Int): List<MovieShortDetails> {
+    override fun search(query: String, moreResults: Int): ServiceSearchResult {
+        val page = 1 + moreResults
         val result: SearchResultCollection = callAPI {
             runBlocking {
                 client.get("$endpointUrl/search/movie") {
                     bearerAuth(token)
                     url {
                         parameter("query", query)
-                        parameter("page", moreResults + 1)
+                        parameter("page", page)
                     }
                 }
             }
         }
-        return result.results.map {
+        val movies = result.results.map {
             MovieShortDetails(
                 id = it.id.toString(),
                 title = it.title,
@@ -63,6 +64,7 @@ class TheMovieDbService(token: String?) : MovieService {
                 startYear = yearFromDateString(it.releaseDate)
             )
         }
+        return ServiceSearchResult(movies, moreResultsAvailable = result.totalPages > page)
     }
 
     override fun get(movieId: String, reason: String): Movie {

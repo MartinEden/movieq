@@ -1,18 +1,15 @@
-@param query: String
-@param reason: String
-@param moreResults: Int
-@param titles: List<eden.movieq.models.MovieShortDetails>
+@param m: eden.movieq.viewModels.LookupViewModel
 
 @template.layout(content = @`
-    Results for "${query}":
+    Results for "${m.query}":
 
     <!--suppress HtmlUnknownTarget -->
     <form name="saveMovie" action="/save/" method="post">
-        <input type="hidden" name="reason" value="${reason}" />
+        <input type="hidden" name="reason" value="${m.reason}" />
         <input type="hidden" name="movieId" />
     </form>
 
-    @for(title in titles)
+    @for(title in m.titles)
         <div class="card card-clickable" onclick="saveMovieCallback('${title.id}');">
             <div class="thumbnail">
                 <img src="${title.imageUrl}" alt="Thumbnail for ${title.title}" />
@@ -28,11 +25,12 @@
         </div>
     @endfor
 
-    <form action="/lookup/" method="get">
-        <input type="hidden" name="query" value="${query}" />
-        <input type="hidden" name="reason" value="${reason}" />
-        <input type="hidden" name="moreResults" value="${moreResults + 1}" />
-        <!-- TODO: Only show if there are more pages -->
-        <button type="submit">Load more results</button>
-    </form>
+    @if(m.moreResultsAvailable)
+        <form action="/lookup/" method="get">
+            <input type="hidden" name="query" value="${m.query}" />
+            <input type="hidden" name="reason" value="${m.reason}" />
+            <input type="hidden" name="moreResults" value="${m.moreResults + 1}" />
+            <button type="submit">Load more results</button>
+        </form>
+    @endif
 `,)
