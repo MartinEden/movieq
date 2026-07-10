@@ -1,12 +1,12 @@
 package eden.movieq.services
 
 import eden.movieq.MovieQApp
-import eden.movieq.models.FullTitleInfo
-import eden.movieq.models.ImageInfo
-import eden.movieq.models.ImageSearchResult
+import eden.movieq.models.imdb.FullTitleInfo
+import eden.movieq.models.imdb.ImageInfo
+import eden.movieq.models.imdb.ImageSearchResult
 import eden.movieq.models.Movie
-import eden.movieq.models.SearchResult
-import eden.movieq.models.TitleInfo
+import eden.movieq.models.MovieShortDetails
+import eden.movieq.models.imdb.SearchResult
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -21,23 +21,31 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import java.time.LocalDate
 
-class ImdbService(val endpointURL: String) {
+class ImdbService(val endpointURL: String): MovieService {
     private val client: HttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
     }
 
-    fun search(query: String, maxResults: Int = 3): List<TitleInfo> {
+    override fun search(query: String, maxResults: Int): List<MovieShortDetails> {
         val result: SearchResult = runBlocking {
-            client.get("$endpointURL/search/titles") {
+            val response = client.get("$endpointURL/search/titles") {
                 url {
                     parameter("query", query)
                     parameter("limit", maxResults)
                 }
-            }.body()
+            }
+            response.body()
         }
-        return result.titles
+        return result.titles.map {
+            MovieShortDetails(
+                id = it.id,
+                title = it.primaryTitle,
+                imageUrl = it.primaryImage.url,
+                startYear = it.startYear
+            )
+        }
     }
 
     private fun downloadThumbnailAndGetPath(movieId: String, title: String, fallback: ImageInfo?): String {
@@ -66,7 +74,7 @@ class ImdbService(val endpointURL: String) {
         return images.images.firstOrNull()
     }
 
-    fun get(movieId: String, reason: String): Movie {
+    override fun get(movieId: String, reason: String): Movie {
         val title: FullTitleInfo = runBlocking {
             client.get("$endpointURL/titles/$movieId").body()
                 ?: throw Exception("Couldn't find title $movieId in IMDB service")

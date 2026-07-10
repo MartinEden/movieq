@@ -1,6 +1,6 @@
 package eden.movieq
 
-import eden.movieq.services.ImdbService
+import eden.movieq.services.MovieService
 import eden.movieq.services.RottenTomatoesService
 import eden.movieq.services.StorageService
 import gg.jte.ContentType
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 class MovieQApp(
-    val imdbService: ImdbService,
+    val movieService: MovieService,
     val rottenTomatoesService: RottenTomatoesService,
     val store: StorageService
 ) {
@@ -43,7 +43,7 @@ class MovieQApp(
         val query = ctx.queryParam("query") ?: throw Exception("No query was provided")
         val maxResults = ctx.queryParam("maxResults")?.toInt() ?: 3
         val reason = ctx.queryParam("reason") ?: ""
-        val titles = imdbService.search(query, maxResults)
+        val titles = movieService.search(query, maxResults)
         ctx.render(
             "lookup.kte", mapOf(
                 "query" to query,
@@ -57,7 +57,7 @@ class MovieQApp(
     fun saveHandler(ctx: Context) {
         val id = ctx.formParam("movieId") ?: throw Exception("No movieId was provided")
         val reason = ctx.formParam("reason") ?: throw Exception("No reason was provided")
-        var movie = imdbService.get(id, reason)
+        var movie = movieService.get(id, reason)
         movie = movie.copy(tomatoMeter = rottenTomatoesService.getTomatoMeterFor(movie.title, movie.year))
         store.save(movie)
         ctx.redirect("/")

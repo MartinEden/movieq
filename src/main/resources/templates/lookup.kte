@@ -1,7 +1,7 @@
 @param query: String
 @param reason: String
 @param maxResults: Int
-@param titles: List<eden.movieq.models.TitleInfo>
+@param titles: List<eden.movieq.models.MovieShortDetails>
 
 @template.layout(content = @`
     Results for "${query}":
@@ -15,11 +15,11 @@
     @for(title in titles)
         <div class="card card-clickable" onclick="saveMovieCallback('${title.id}');">
             <div class="thumbnail">
-                <img src="${title.primaryImage.url}" alt="Thumbnail for ${title.primaryTitle}" />
+                <img src="${title.imageUrl}" alt="Thumbnail for ${title.title}" />
             </div>
             <div class="card-main">
                 <div class="title">
-                    ${title.primaryTitle}
+                    ${title.title}
                     @if(title.startYear != null)
                         <span class="year">(${title.startYear})</span>
                     @endif

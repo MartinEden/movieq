@@ -3,6 +3,7 @@
 movieq.db
 movieq-backup/
 backup_movieq.sh
+/config.json
 build/
 static/
 !gradle/wrapper/gradle-wrapper.jar
