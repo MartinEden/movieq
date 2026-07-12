@@ -12,13 +12,18 @@ set -e
 echo "DO NOT RUN AS ROOT"
 
 data_path=${HOME}/.movieq
+db_path=$data_path/db
+config_path=$data_path/config.json
+thumbnail_path=$data_path/thumbnails/
+
 mkdir -p "$data_path"
 
-db_path=$data_path/db
 echo "- Create blank database at $db_path"
 touch "$db_path"
 
-thumbnail_path=$data_path/thumbnails/
+echo "- Create blank config at $config_path"
+touch "$config_path"
+
 echo "- Create thumbnail store at $thumbnail_path"
 mkdir -p "$thumbnail_path"
 
@@ -46,6 +51,7 @@ docker run \
     --restart unless-stopped \
     --name $container_name \
     --mount type=bind,source="$db_path",target=/code/movieq.db \
+    --mount type=bind,source="$config_path",target=/code/config.json \
     --mount type=bind,source="$thumbnail_path",target=/code/static/thumbnails \
     "$image"
 
