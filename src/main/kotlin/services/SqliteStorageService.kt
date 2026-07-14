@@ -4,6 +4,7 @@ import eden.movieq.MovieQApp
 import eden.movieq.models.Movie
 import eden.movieq.models.sql.*
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
+import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.dao.with
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -34,6 +35,20 @@ class SqliteStorageService : StorageService {
             addLogger(StdOutSqlLogger)
             TagEntity.all().toList().map { it.name }
         }
+
+//    override fun get(imdbId: String): Movie? {
+//        return MovieEntity
+//            .find { MoviesTable.imdbId eq imdbId }
+//            .with(MovieEntity::tags)
+//            .singleOrNull { it.imdbId == imdbId }
+//            ?.toMovie()
+//    }
+
+    override fun updateMovie(imdbId: String, changes: (MovieEntity) -> Unit): MovieEntity? {
+        return transaction {
+            MovieEntity.findSingleByAndUpdate(MoviesTable.imdbId eq imdbId, changes)
+        }
+    }
 
     override fun insert(movie: Movie) {
         transaction {

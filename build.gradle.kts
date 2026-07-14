@@ -22,6 +22,7 @@ dependencies {
 
     implementation("io.javalin:javalin:6.7.0")
     implementation("io.javalin:javalin-rendering:6.7.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 
     implementation("gg.jte:jte:3.2.4")
     implementation("gg.jte:jte-kotlin:3.2.4")

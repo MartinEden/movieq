@@ -68,7 +68,10 @@ window.startVue = function(movies, allTags) {
                     if (!response.ok) {
                         throw new Error(`Response status: ${response.status}`);
                     }
-                    // …
+                    const data = await response.json(); // ApiResponse object
+                    if (data.result !== "Success") {
+                        throw new Error(`Result: ${data.message}`);
+                    }
                 } catch (error) {
                     console.log(error)
                     alert(error.message);

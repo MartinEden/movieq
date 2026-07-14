@@ -11,6 +11,7 @@ import gg.jte.resolve.ResourceCodeResolver
 import io.javalin.Javalin
 import io.javalin.http.Context
 import io.javalin.http.staticfiles.Location
+import io.javalin.json.JsonMapper
 import io.javalin.rendering.template.JavalinJte
 import kotlinx.serialization.json.Json
 import org.slf4j.Logger
@@ -71,11 +72,15 @@ class MovieQApp(
     }
 
     fun markWatchedHandler(ctx: Context) {
-        TODO()
-//        val imdbId = ctx.pathParam("imdbId")
-//        val movie: Movie = store.get(imdbId)
-//        movie.dateWatched = LocalDate.now()
-//        store.saveChanges(movie)
+        val imdbId = ctx.pathParam("imdbId")
+        val result = store.updateMovie(imdbId) {
+            it.dateWatched = LocalDate.now()
+        }
+        if (result != null) {
+            ctx.json(ApiResponse.good)
+        } else {
+            ctx.json(ApiResponse.error("Unknown movie with id '$imdbId'"))
+        }
     }
 
     private fun makeJavalin(): Javalin = Javalin.create {

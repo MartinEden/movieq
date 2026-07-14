@@ -2,6 +2,7 @@ package eden.movieq.services
 
 import eden.movieq.models.imdb.ImageInfo
 import eden.movieq.models.Movie
+import eden.movieq.models.sql.MovieEntity
 import java.time.LocalDate
 
 @Suppress("unused")
@@ -12,6 +13,9 @@ class DummyStorageService : StorageService {
 
     override val all get() = movies
     override val tags get() = movies.flatMap { it.tags }.distinct().sortedBy { it }
+    override fun updateMovie(imdbId: String, changes: (MovieEntity) -> Unit): MovieEntity? {
+        TODO()
+    }
 
     private val movies: MutableList<Movie> = mutableListOf(
         Movie(

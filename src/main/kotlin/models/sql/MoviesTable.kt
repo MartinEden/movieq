@@ -31,7 +31,7 @@ class MovieEntity(id: EntityID<Int>) : IntEntity(id) {
     var synopsis by MoviesTable.synopsis
     var year by MoviesTable.year
     var dateAdded by MoviesTable.dateAdded
-    val dateWatched by MoviesTable.dateWatched
+    var dateWatched by MoviesTable.dateWatched
     var rating by MoviesTable.rating
     var tomatoMeter by MoviesTable.tomatoMeter
     var thumbnail by MoviesTable.thumbnail
